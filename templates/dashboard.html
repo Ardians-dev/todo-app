@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow">
+  <h2 class="text-2xl font-bold mb-4">Daftar Tugas</h2>
+  <form class="flex gap-2 mb-4" action="/dashboard" method="POST">
+    <input type="text" name="isi_todo" placeholder="Tambahkan tugas..." class="flex-1 p-2 border rounded" />
+    <button type="submit" class="bg-blue-600 text-white px-4 rounded hover:bg-blue-700">Tambah</button>
+  </form>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash {{ category }} text-center p-2">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+  {% if todos%}
+  <ul class="space-y-2">
+    {% for todo in todos %}
+    <li class="flex justify-between items-center p-2 border rounded {% if todo.selesai %}bg-green-300{% endif %}">
+      <span>{{ todo.isi_todo }}</span>
+      <div class="" >
+        <a href="/selesai/{{ todo.id }}">☑️</a> |
+        <a href="/hapus/{{ todo.id }}" onclick="return confirm('Yakin ingin menghapus?')">❌</a>
+      </div>
+    </li>
+    {%  endfor %}
+  </ul>
+  {% else %}
+        <h3 class="text-center">Belum Ada Todo</h3>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block script %}
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+{% endblock %}
+
